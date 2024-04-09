@@ -1,0 +1,145 @@
+<h1>Beneficiarios</h1>
+<div class="pull-right">
+	<a href="#/edit" class="btn btn-success">Crear Beneficiario</a>
+</div>
+
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>
+				No Documento
+				<a ng-click="sortBy='numero_documento'" data-toggle="modal" data-target="#" class="glyphicon glyphicon-chevron-down"></a><a ng-click="sortBy='-numero_documento'" class="glyphicon glyphicon-chevron-up"></a>
+			</th>
+			<th>
+				Primer Nombre
+				<a ng-click="sortBy='primer_nombre'" class="glyphicon glyphicon-chevron-down"></a><a ng-click="sortBy='-primer_nombre'" class="glyphicon glyphicon-chevron-up"></a>
+			<th>
+				Segundo Nombre
+				<a ng-click="sortBy='segundo_nombre'" class="glyphicon glyphicon-chevron-down"></a><a ng-click="sortBy='-segundo_nombre'" class="glyphicon glyphicon-chevron-up"></a>
+			<th>
+				Primer Apellido
+				<a ng-click="sortBy='primer_apellido'" class="glyphicon glyphicon-chevron-down"></a><a ng-click="sortBy='-primer_apellido'" class="glyphicon glyphicon-chevron-up"></a>
+			<th>
+				Segundo Apellido
+				<a ng-click="sortBy='segundo_apellido'" class="glyphicon glyphicon-chevron-down"></a><a ng-click="sortBy='-segundo_apellido'" class="glyphicon glyphicon-chevron-up"></a>
+			</th>
+			<th colspan="2">
+				Atención
+			</th>
+			<th>&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="beneficiario in beneficiarios | filter: filter | orderBy: sortBy">
+			<td>{{beneficiario.numero_documento}}</td>
+			<td>{{beneficiario.primer_nombre}}</td>
+			<td>{{beneficiario.segundo_nombre}}</td>
+			<td>{{beneficiario.primer_apellido}}</td>
+			<td>{{beneficiario.segundo_apellido}}</td>
+			<td>
+				<div class="checkbox"><!--pre>{{beneficiario|json}}</pre-->
+		            <label style="font-size: 1.05em">
+		                <input type="checkbox"
+											ng-model="asistenciaCheck[beneficiario.id]"
+											ng-checked="{{beneficiario.asistencia}}"
+											ng-changsse="setAsistencia(asistenciaCheck,beneficiario)"
+											ng-click="setAsistencia(asistenciaCheck,beneficiario)"
+											id="beneficiario[{{beneficiario.id}}]"
+										>
+		                <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+		            </label>
+		        </div>
+			</td>
+			<td>
+					<span class="{{beneficiario.asistencias.length>=beneficiario.maximo_dias_asistencia?'btn btn-warning':'btn btn-success'}}">
+						{{beneficiario.asistencias.length}}
+					</span>
+				<!--pre>{{beneficiario.asistencias.length}}</pre>
+  				<span ng-show="beneficiario.asistencias.length>=beneficiario.maximo_dias_asistencia" class="btn btn-warning">{{beneficiario.asistencias.length}}</span>
+					<span ng-show="!beneficiario.asistencias.length || beneficiario.asistencias.length<beneficiario.maximo_dias_asistencia" class="btn btn-success">{{beneficiario.asistencias.length?beneficiario.asistencias.length:0}}</span>
+					<span ng-show="beneficiario.asistencias.length<beneficiario.maximo_dias_asistencia" class="btn btn-success">{{beneficiario.asistencias.length}}</span-->
+			</td>
+			<!--td>{{beneficiario.updated | dateFormat}}</td-->
+			<td>
+				<a class="btn btn-primary" href="#/edit/{{beneficiario.key}}">Editar</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div class="pull-right">
+	<a href="#/edit" class="btn btn-success">Crear Beneficiario</a>
+</div>
+<!--pre>{{beneficiarios | json}}</pre-->
+
+<!-- Modal -->
+<div class="modal fade" id="modalAsistencia" role="dialog">
+	<form role="form" class="form-horizontal" ng-submit="save()" name="asistencia">
+	<div class="modal-dialog modal-lg">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <button type="button" class="close" data-dismiss="modal">&times;</button>
+	      <h4 class="modal-title">Registrar asistencia</h4>
+	    </div>
+	    <div class="modal-body">
+	      <div class="panel panel-info">
+		      <div class="panel-heading">
+		      	{{beneficiario.numero_documento}} - {{beneficiario.primer_nombre}} {{beneficiario.segundo_nombre}} {{beneficiario.primer_apellido}} {{beneficiario.segundo_apellido}}
+		  	 </div>
+		      <div class="panel-body">
+					<input type="hidden" id="key" ng-model="beneficiario.id">
+					<div class="form-group">
+						<label for="complemento" class="col-lg-2 control-label">Complemento</label>
+						<div class="col-lg-10">
+							<div class="input-group">
+								<ui-select ng-model="beneficiario.complemento" id="complemento" theme="bootstrap" ng-required="true">
+									<ui-select-match placeholder="Seleccione un complemento...">{{$select.selected.nombre}}</ui-select-match>
+									<ui-select-choices repeat="complemento in beneficiario.complementos | filter: $select.search">
+										<span ng-bind-html="complemento.nombre | highlight: $select.search"></span>
+									</ui-select-choices>
+								</ui-select>
+								<span class="input-group-btn">
+									<button type="button" ng-click="beneficiario.complemento = undefined" class="btn btn-default">
+										<span class="glyphicon glyphicon-trash"></span>
+									</button>
+								</span>
+							</div>
+							<input type="hidden" name="complemento" ng-model="beneficiario.complemento" required/>
+						</div>
+					</div>
+		      </div>
+		    </div>
+			    <div class="panel panel-info">
+			      <div class="panel-heading">Asistencias registradas</div>
+			      <div class="panel-body">
+					<table class="table table-bordered table-striped">
+						<thead>
+						<tr>
+							<th>
+								Complemento
+							</th>
+							<th>
+								Fecha
+							</th>
+						</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="asistencia in beneficiario.asistenciasBeneficiario | filter: filter | orderBy: sortBy">
+								<td>{{beneficiario.complementos[asistencia.complemento_id - 1].nombre}}</td>
+								<td>{{asistencia.creado | dateFormat}}</td>
+							</tr>
+						</tbody>
+					</table>
+
+			      </div>
+			    </div>
+	    </div>
+	    <div class="modal-footer">
+	      <button type="button" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+	      <button id="saveNoteButton" class="btn btn-success btn-default pull-rigth"  ng-disabled="asistencia.$invalid || beneficiario.asistenciasBeneficiario.length>=beneficiario.complementos.length"><span class="glyphicon glyphicon-save"></span>Guardar</button>
+	    </div>
+	  </div>
+	</div>
+	</form>
+	<div class="form-group">
+</div>

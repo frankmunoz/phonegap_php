@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html >
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>PMA Emergencia</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+	<meta http-equiv=“Content-Security-Policy” content=“default-src *; style-src 'self’ 'unsafe-inline’; script-src 'self’ 'unsafe-eval’ 'unsafe-inline’; media-src *”>
+
+
+	<link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+	<!--link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css"-->
+
+	<link rel="stylesheet" href="style/app.css">
+	<link rel="stylesheet" href="style/angular-select.css">
+<style>
+	/*
+	#overlay {
+	  background: #ffffff;
+	  color: #666666;
+	  position: fixed;
+	  height: 100%;
+	  width: 100%;
+	  z-index: 5000;
+	  top: 0;
+	  left: 0;
+	  float: left;
+	  text-align: center;
+	  padding-top: 25%;
+	  opacity: .80;
+	}
+	.spinner {
+	    margin: 0 auto;
+	    height: 64px;
+	    width: 64px;
+	    animation: rotate 0.8s infinite linear;
+	    border: 5px solid firebrick;
+	    border-right-color: transparent;
+	    border-radius: 50%;
+	}
+	@keyframes rotate {
+	    0% {
+	        transform: rotate(0deg);
+	    }
+	    100% {
+	        transform: rotate(360deg);
+	    }
+	}*/
+
+</style>
+  <style>
+  .modal-header, h4, .close {
+      background-color: #5cb85c;
+      color:white !important;
+      text-align: center;
+      font-size: 30px;
+  }
+  .modal-footer {
+      background-color: #f9f9f9;
+  }
+  .checkbox label:after,
+.radio label:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.checkbox .cr,
+.radio .cr {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #a9a9a9;
+    border-radius: .25em;
+    width: 1.3em;
+    height: 1.3em;
+    float: left;
+    margin-right: .5em;
+}
+
+.radio .cr {
+    border-radius: 50%;
+}
+
+.checkbox .cr .cr-icon,
+.radio .cr .cr-icon {
+    position: absolute;
+    font-size: .8em;
+    line-height: 0;
+    top: 50%;
+    left: 20%;
+}
+
+.radio .cr .cr-icon {
+    margin-left: 0.04em;
+}
+
+.checkbox label input[type="checkbox"],
+.radio label input[type="radio"] {
+    display: none;
+}
+
+.checkbox label input[type="checkbox"] + .cr > .cr-icon,
+.radio label input[type="radio"] + .cr > .cr-icon {
+    transform: scale(3) rotateZ(-20deg);
+    opacity: 0;
+    transition: all .3s ease-in;
+}
+
+.checkbox label input[type="checkbox"]:checked + .cr > .cr-icon,
+.radio label input[type="radio"]:checked + .cr > .cr-icon {
+    transform: scale(1) rotateZ(0deg);
+    opacity: 1;
+}
+
+.checkbox label input[type="checkbox"]:disabled + .cr,
+.radio label input[type="radio"]:disabled + .cr {
+    opacity: .5;
+}
+  </style>
+</head>
+<body ng-app="pmaEmergencia">
+
+	<div id="overlay" data-ng-if="loading">
+    <div class="spinner"></div>LOADING
+</div>
+
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">PMA-Emergencia</a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li ><a href="#beneficiario">Beneficiarios</a></li>
+					<li><a href="#/sync">Sicnronizar</a></li>
+					<li><a href="#/about">Acerca de</a></li>
+				</ul>
+
+				<form class="navbar-form navbar-right">
+					<div class="form-group">
+						<input type="search" id="filterField" placeholder="Buscar beneficiario" class="form-control" ng-model="filter">
+					</div>
+				</form>
+
+			</div><!--/.nav-collapse -->
+		</div>
+	</div>
+
+	<div class="container" ng-view></div>
+
+	<script src="js/angular.min.js"></script>
+	<script src="js/angular-route.min.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/controllers.js"></script>
+	<script src="js/services.js"></script>
+	<script src="js/filters.js"></script>
+	<script src="js/LoadingInterceptor.js"></script>
+	<script src="js/angular-select.js"></script>
+	<script type="text/javascript" src="js/simpleIDB.js"></script>
+
+	<script src="js/angular-sanitize.js"></script>
+	<link rel="stylesheet" href="style/select2.css">
+	<link rel="stylesheet" href="style/selectize.default.css">
+
+	<link href="style/alertify.min.css" rel="stylesheet"/>
+	<script src="js/alertify.min.js"></script>
+	<script type="text/javascript">
+
+		(function() {
+		    var xhr = {};
+		    xhr.open = XMLHttpRequest.prototype.open;
+
+		    XMLHttpRequest.prototype.open = function(method, url) {
+		        console.log(url);
+		        if(url.indexOf('/proxy/') == 0){
+		            url = window.decodeURIComponent(url.substr(7));
+		        }
+		        xhr.open.apply(this, arguments);
+		    };
+		})(window);
+	</script>
+
+  <!--link rel="stylesheet" href="bootstrap/css/bootstrap-select.min.css"-->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+</body>
+</html>
